@@ -8,12 +8,4 @@ module.exports = function(app) {
       changeOrigin: true
     })
   );
-
-//   app.use(
-//     proxy("/addusers", {
-//       target: "https://dog.ceo",
-//       secure: false,
-//       changeOrigin: true
-//     })
-//   );
 };

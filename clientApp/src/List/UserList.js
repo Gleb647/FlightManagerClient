@@ -2,8 +2,8 @@ import "./App.css"
 import {UserListItem} from './UserListItem'
 import axios from 'axios';
 import  React,{ Component, useState, useEffect } from 'react';
-import UserFindInput from "./UserFindInput/UserFindInput";
-import { isExpired, getToken } from './Utils.js/CheckToken'
+import UserFindInput from "../UserFindInput/UserFindInput";
+import { isExpired, getToken } from '../Utils.js/CheckToken'
 import { Navigate, useNavigate } from "react-router-dom";
 
 const UserList = (props) =>{

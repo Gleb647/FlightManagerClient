@@ -2,13 +2,13 @@ import "./App.css"
 import {UserListInnerItem} from './UserListInnerItem'
 import axios from 'axios';
 import  React,{ Component, useState, useEffect } from 'react';
-import UserFindInput from "./UserFindInput/UserFindInput";
-import { isExpired, getToken } from './Utils.js/CheckToken'
+import UserFindInput from "../UserFindInput/UserFindInput";
+import { isExpired, getToken } from '../Utils.js/CheckToken'
 import { Navigate, useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useRef } from "react";
 import { UserListItem } from "./UserListItem";
-import PriceBetween from "./PriceBetween/PriceBetween";
+import PriceBetween from "../PriceBetween/PriceBetween";
 
 const UserInnerList = (props) =>{
 

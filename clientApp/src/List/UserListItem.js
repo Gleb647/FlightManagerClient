@@ -3,8 +3,8 @@ import { Link } from 'react-router-dom';
 import './App.css'
 import { useState } from 'react';
 import { useEffect } from 'react';
-import { isExpired, getToken } from './Utils.js/CheckToken'
-import UserInnerList from './UserInnerList';
+import { isExpired, getToken } from '../Utils.js/CheckToken'
+import UserInnerList from '../InnerList/UserInnerList';
 
 function UserListItem(props){
 
