@@ -1,4 +1,4 @@
-import "./App.css"
+import "../App.css"
 import {UserListItem} from './UserListItem'
 import axios from 'axios';
 import  React,{ Component, useState, useEffect } from 'react';

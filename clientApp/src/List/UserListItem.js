@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Link } from 'react-router-dom';
-import './App.css'
+import '../App.css'
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { isExpired, getToken } from '../Utils.js/CheckToken'

@@ -17,34 +17,22 @@ const ControlPanel = (props) => {
     const [toInput, setToInput] = useState('');
     const [node, setNode] = useState(false);
     const [blank, setBlank] = useState(false);
+    const [validationError, setValidationError] = useState(false);
     const location = useLocation();
     const navigate = useNavigate();
-
-    // const chechkExp = async() =>{
-    //     if (isExpired()){
-    //         await getToken().then(response =>{
-    //             if (response){
-    //                 props.changeLoggedInState(false);
-    //                 navigate("/login");
-    //             }
-    //         });
-    //     }                
-    // }
 
     const nodeIsAlreadyExist = () =>{
         setNode(true);
     }
-
-    const resetNodeState = () =>{
+    
+    const resetAllMessages = () =>{
         setNode(false);
+        setBlank(false);
+        setValidationError(false);
     }
 
     const setBlankState = () =>{
         setBlank(true);
-    }
-
-    const resetBlankState = () =>{
-        setBlank(false);
     }
 
     const AddUserRequest = async () => {
@@ -103,12 +91,12 @@ const ControlPanel = (props) => {
         setToInput('');
     }
 
-    const returnInfoAboutAuth = () =>{
+    const returnInfoAboutAuth = (str) =>{
         return(
             <tr>
                 <td className = "credentials">
                     <div className="wrong_cred">
-                        <p><span class="wrong_cred">Node is already exist</span></p>
+                        <p><span class="wrong_cred">{str}</span></p>
                     </div>
                 </td>
             </tr>
@@ -116,22 +104,12 @@ const ControlPanel = (props) => {
     }
 
     const checkWay = () =>{
-        toInput.length == 0 || fromInput.length == 0 ? setBlankState() : location.state == null ? AddUserRequest() : putUserRequest();
+        toInput.length == 0 || fromInput.length == 0 ? setBlankState() : (!/^[A-Z]+$/i.test(toInput) || !/^[A-Z]+$/i.test(fromInput)) ? 
+            setValidationError(true):location.state == null ? AddUserRequest() : putUserRequest();
         setToInput("");
         setFromInput("");
     }
 
-    const checkForBlankInputs = () =>{
-        return(
-            <tr>
-                <td className = "credentials">
-                    <div className="wrong_cred">
-                        <p><span class="wrong_cred">Fill in all the fields</span></p>
-                    </div>
-                </td>
-            </tr>
-        )
-    }
 
     return(
             <div className="ControlPanel">             
@@ -143,7 +121,8 @@ const ControlPanel = (props) => {
                                 <div className="form-group row">
                                 <label for="inputCompany3" className="col-sm-3.5 col-form-label">From:</label>
                                     <div className="col-sm-8">
-                                        <input type="name" value={fromInput} className="form-control" name={fromInput} onChange={(event) => {setFromInput(event.target.value); resetNodeState(); resetBlankState()}}/>
+                                        <input type="name" value={fromInput} className="form-control" name={fromInput} 
+                                        onChange={(event) => {setFromInput(event.target.value); resetAllMessages()}}/>
                                     </div>
                                 </div>
                             </tr>
@@ -152,13 +131,14 @@ const ControlPanel = (props) => {
                                 <div className="form-group row">
                                 <label for="inputCompany3" className="col-sm-3.5 col-form-label">To:</label>
                                     <div className="col-sm-8">
-                                        <input type="name" value={toInput} className="form-control" name={toInput} onChange={(event) => {setToInput(event.target.value); resetNodeState(); resetBlankState()}}/>
+                                        <input type="name" value={toInput} className="form-control" name={toInput} 
+                                        onChange={(event) => {setToInput(event.target.value); resetAllMessages()}}/>
                                     </div>
                                 </div>
                             </tr>
-
-                            {node ? returnInfoAboutAuth() : null}
-                            {blank ? checkForBlankInputs() : null}
+                            {node ? returnInfoAboutAuth("Node is already exist") : null}
+                            {validationError ? returnInfoAboutAuth("Can't contain digits") : null}
+                            {blank ? returnInfoAboutAuth("Fill in all the fields") : null}
                             <tr>
                                 <td>
                                 <input className="btn btn-info cent" type="button" value="Post" onClick={ () =>{checkWay()}}/>          

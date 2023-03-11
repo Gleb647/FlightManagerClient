@@ -1,4 +1,4 @@
-import "./App.css"
+import "../App.css"
 import {UserListInnerItem} from './UserListInnerItem'
 import axios from 'axios';
 import  React,{ Component, useState, useEffect } from 'react';
@@ -7,7 +7,7 @@ import { isExpired, getToken } from '../Utils.js/CheckToken'
 import { Navigate, useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { useRef } from "react";
-import { UserListItem } from "./UserListItem";
+import { UserListItem } from "../List/UserListItem";
 import PriceBetween from "../PriceBetween/PriceBetween";
 
 const UserInnerList = (props) =>{

@@ -60,7 +60,8 @@ export default function RegisterForm(){
                             <div className="form-group row">
                             <label for="inputCompany3" className="col-sm-3.5 col-form-label">Name:</label>
                                 <div className="col-sm-8">
-                                    <input type="name" value={name} className="form-control" id="inputCompany3" name={name} onChange={(event) => {setName(event.target.value);removeWrongCredentials()}}/>
+                                    <input type="name" value={name} className="form-control" id="inputCompany3" name={name} 
+                                    onChange={(event) => {setName(event.target.value);removeWrongCredentials()}}/>
                                 </div>
                             </div>
                         </tr>
@@ -68,7 +69,8 @@ export default function RegisterForm(){
                             <div className="form-group row">
                             <label for="inputExp3" className="col-sm-3.5 col-form-label">Login:</label>
                                 <div className="col-sm-8">
-                                    <input type="name" value={login} className="form-control" id="inputExp3" name={login} onChange={(event) => {setLogin(event.target.value);removeWrongCredentials()}}/>
+                                    <input type="name" value={login} className="form-control" id="inputExp3" name={login} 
+                                    onChange={(event) => {setLogin(event.target.value);removeWrongCredentials()}}/>
                                 </div>
                             </div>
                         </tr>
@@ -76,7 +78,8 @@ export default function RegisterForm(){
                             <div className="form-group row">
                             <label for="inputExp3" className="col-sm-3.5 col-form-label">Password:</label>
                                 <div className="col-sm-8">
-                                    <input type="password" value={password} className="form-control" id="inputExp3" name={password} onChange={(event) => {setPassword(event.target.value);removeWrongCredentials()} }/>
+                                    <input type="password" value={password} className="form-control" id="inputExp3" name={password} 
+                                    onChange={(event) => {setPassword(event.target.value);removeWrongCredentials()} }/>
                                 </div>
                             </div>
                         </tr>

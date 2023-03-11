@@ -1,17 +1,17 @@
 import './App.css';
 import { Component } from 'react';
 import ControlPanel from './ControlPanel/ControlPanel';
-import UserList from './UserList';
+import UserList from './List/UserList';
 import UserFindInput from './UserFindInput/UserFindInput';
-import UserListInnerItem from './UserListInnerItem';
-import ButtonAppBar from './header/ButtonAppBar';
+import UserListInnerItem from './InnerList/UserListInnerItem';
+import ButtonAppBar from './Header/ButtonAppBar';
 import { Link, Route, Routes } from 'react-router-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import AddUserInfo from './AddUserInfo/AddUserInfo';
 import RegisterForm from './Register/RegisterForm';
 import LoginForm from './Login/LoginForm';
 import { isExpired } from './Utils.js/CheckToken';
-import UserInnerList from './UserInnerList';
+import UserInnerList from './InnerList/UserInnerList';
 
 export default class App extends Component{
 

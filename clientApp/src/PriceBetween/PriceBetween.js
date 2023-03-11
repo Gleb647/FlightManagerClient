@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { UserListItem } from "../UserListItem";
+import { UserListItem } from "../List/UserListItem";
 
 function PriceBetween(props){
 
