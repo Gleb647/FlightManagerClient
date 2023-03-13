@@ -49,7 +49,7 @@ const AddUserInfo = (props) =>{
 
     const checkWay = () =>{
         duration.length == 0 || cost.length == 0 || carrier.length == 0 || date.length == 0 ? 
-            setBlank(true) : (!/^[A-Z]+$/i.test(duration) || !/^[A-Z]+$/i.test(cost)) ? 
+            setBlank(true) : (!/^[0-9]+$/i.test(duration) || !/^[0-9]+$/i.test(cost)) ? 
             setCharacterValidationStatus(true) : PostUserInfo();
         setCarrierInput("");
         setCostInput("");
@@ -103,7 +103,7 @@ const AddUserInfo = (props) =>{
                             </div>
                         </tr>
                         {blank ? returnInfoAboutAuth("Fill in all the fields") : null}
-                        {characterValidationStatus ? returnInfoAboutAuth("Can't contain digits") : null}
+                        {characterValidationStatus ? returnInfoAboutAuth("Can't contain characters") : null}
                         <tr>
                             <td>
                                 <input className="btn btn-info cent" type="button" value="Post" onClick={() => checkWay()}/>       

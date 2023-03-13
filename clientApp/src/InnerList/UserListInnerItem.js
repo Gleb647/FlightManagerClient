@@ -15,6 +15,25 @@ function UserListInnerItem(props){
         return ms.at(2) + "-" + ms.at(1) + "-"+ms.at(0);
     }
 
+    const buyTicket = async () =>{
+        const userName = localStorage.getItem("user");
+        console.log("User" + userName);
+
+        let config = {
+            headers: {'Content-type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+                },
+            params: {
+                username: userName 
+            },
+        }
+
+        await axios.get(`http://localhost:8080/buy-ticket/${props.id}`, config)
+        .then(response =>{
+            console.log("Ticket succesfully bought");
+        })
+    }
+
     return(
         <tr className="setTextMid">                  
             <td className="setTextMid setColumnInnerTextMid">{props.carrier}</td>
@@ -22,7 +41,9 @@ function UserListInnerItem(props){
             <td className="setTextMid setColumnInnerTextMid">{parseDate()}</td>
             <td className="setTextMid setColumnInnerTextMid">{string.split(" ").at(1)} </td>
             <td className="setTextMid setColumnInnerTextMid">{props.cost} $</td>
-            <td className="setTextMid setColumnInnerTextMid"><button type="button" className="btn btn-outline-dark deleteBtn btn-sm">Buy ticket</button></td>
+            <td className="setTextMid setColumnInnerTextMid">
+                <button type="button" className="btn btn-outline-dark deleteBtn btn-sm" onClick={()=>{buyTicket()}}>Buy ticket</button>
+            </td>
         </tr>
     )
 }

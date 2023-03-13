@@ -32,6 +32,7 @@ export default function LoginForm(props){
           .then((response) => {
             props.changeLoggedInState(true);
             console.log(response.data.access_token);
+            localStorage.setItem("user", login);
             localStorage.setItem("access_token", response.data.access_token);
             localStorage.setItem("refresh_token", response.data.refresh_token);
             localStorage.setItem("exp", response.data.exp);
