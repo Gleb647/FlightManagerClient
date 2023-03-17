@@ -8,7 +8,7 @@ function PriceBetween(props){
     const [maxPrice, setMaxPrice] = useState("");
     const [user, setUser] = useState([]);
     const [selectValue, setSelectValue] = useState("From..");
-    const [param, setParam] = useState({min: "0"});
+    const [param, setParam] = useState([]);
 
         useEffect(() =>{
             if (minPrice.length >= 1 && maxPrice.length >= 1){
@@ -17,34 +17,33 @@ function PriceBetween(props){
                     min: minPrice,
                     max: maxPrice
                 })
+                fetchData();
             }else if (minPrice.length >= 1){
                 setParam({
                     min: minPrice,
                 })
+                fetchData();
             }else if (maxPrice.length >= 1){
                 setParam({
                     max: maxPrice,
                 })
+                fetchData();
             }else {
-                setParam({
-                    min: 0,
-                })
+                props.sendGetReq();
             }
         }, [minPrice, maxPrice])
     
-        useEffect(() => {
-            const fetchData = async () => {
-                await axios
-                .get(
-                    `http://localhost:8080/flightinfo/get-flight-info-between/${props.prodId}`, {
-                        params: param
-                    })
-                .then(response => {
-                    props.changeList(response.data);
-                });
-                };
-                fetchData();
-        }, [param]);
+        const fetchData = async () => {
+            await axios
+            .get(
+                `http://localhost:8080/flightinfo/get-flight-info-between/${props.prodId}`, {
+                    params: param
+                })
+            .then(response => {
+                props.changeList(response.data);
+            });
+        };
+
 
     return(
         <div>

@@ -13,19 +13,25 @@ import PriceBetween from "../PriceBetween/PriceBetween";
 const UserInnerList = (props) =>{
 
     const [list, setListInfo] = useState([[]]);
+    const [get, setGet] = useState(false);
     const params = useParams();
 
-    useEffect(() =>{
-        const getUserExpInfo = async () =>{
-            const prodId = params.id;
-            await axios.get(`http://localhost:8080/flightinfo/get/${prodId}`)
-                .then(res => {
-                    setListInfo(res.data);
-                })
+    const sendGetReq = () =>{
+        setGet(!get);
+    }
+
+    const getUserExpInfo = async () =>{
+        const prodId = params.id;
+        await axios.get(`http://localhost:8080/flightinfo/get/${prodId}`)
+            .then(res => {
+                setListInfo(res.data);
             }
+        )
+    }
+
+    useEffect(() =>{
         getUserExpInfo();
-        props.setTrueUpdateState();
-    }, [])
+    }, [get])
 
     useEffect(()=>{
         displayListItem();
@@ -50,7 +56,7 @@ const UserInnerList = (props) =>{
 
   return(
     <div>
-        <PriceBetween changeList={changeList} prodId={params.id}/>
+        <PriceBetween changeList={changeList} prodId={params.id} sendGetReq={sendGetReq}/>
         <table className="table table-striped">
             <tbody>
                 <tr className="setTextMid">

@@ -10,8 +10,6 @@ const UserList = (props) =>{
 
     const [update, setUpdate] = useState({...props.update});
     const [data, setData] = useState([]);
-    const [userFindParam, setUserFindParam] = useState("");
-    const [userFindName, setUserFindName] = useState("");
     const [updateValue, setUpdateValue] = useState(false)
     const navigate = useNavigate();
 
@@ -24,25 +22,22 @@ const UserList = (props) =>{
         setUpdateValue(!updateValue);
     }
 
-    React.useEffect(() => {
+    useEffect(() => {
         setUpdate(props.update);
     }, [props.update])
 
-    useEffect(()=>{
-        
-    }, [changeUpdateValue]) 
-
     const updateFlightInfoById = (node) =>{
-        data.forEach(function(i){
-            node.forEach(function(j) {
-                if (Object.values(i)[0] == Object.values(j)[0]){
-                    Object.assign(i, j);
-                }
-              });
-        })
-        setData(data);
+        setData(node.sort((a,b) => a.id-b.id));
         changeUpdateValue();
     }
+
+    const fetchData = async () => {
+        await axios(
+            'http://localhost:8080/flights/get',
+        ).then(response => {
+            setData(response.data);
+        });
+    };
 
     useEffect(() => {
         const chechkExp = async() =>{
@@ -55,41 +50,14 @@ const UserList = (props) =>{
                 });
             }                
         }
-        const fetchData = async () => {
-            await axios(
-                'http://localhost:8080/flights/get',
-            ).then(response => {
-                setData(response.data);
-            });
-        };
         chechkExp();
         fetchData();
-    }, [update]);
-
-    const changeUserFindName = (name) =>{
-        setUserFindName(name);
-    }
-
-    const changeUserFindParam = (param) =>{
-        setUserFindParam(param);
-    }
+    }, []);
 
     const displayListItem = () =>{
         return(
             <>
-                {data.filter(items => items.departure === userFindName).length > 0 && userFindParam === "From.." ||
-                data.filter(items => items.destination === userFindName).length > 0 && userFindParam === "To.." ?
-                userFindParam === "From.." ? data.filter(items => items.departure === userFindName).map(items=>{
-                    return (             
-                        <UserListItem loggedIn={props.loggedIn} roles={props.roles} className='UsersTable' changeUpdate={changeUpdate} key={items.id} 
-                        id={items.id} departure={items.departure} destination={items.destination} flights_available={items.flightsAvailable}/>
-                    );
-                }) : data.filter(items => items.destination === userFindName).map(items=>{
-                    return (             
-                        <UserListItem loggedIn={props.loggedIn} roles={props.roles} className='UsersTable' changeUpdate={changeUpdate} key={items.id} 
-                        id={items.id} departure={items.departure} destination={items.destination} flights_available={items.flightsAvailable}/>
-                    );
-                }) : data.map(items =>{
+                {data.map(items=>{
                     return (             
                         <UserListItem loggedIn={props.loggedIn} roles={props.roles} className='UsersTable' changeUpdate={changeUpdate} key={items.id} 
                         id={items.id} departure={items.departure} destination={items.destination} flights_available={items.flightsAvailable}/>
@@ -100,8 +68,8 @@ const UserList = (props) =>{
     }
 
   return(
-    <div>
-        <UserFindInput changeUserFindName={changeUserFindName} changeUserFindParam={changeUserFindParam} updateFlightInfoById={updateFlightInfoById}
+    <div className="tableDiv">
+        <UserFindInput updateFlightInfoById={updateFlightInfoById} fetchData={fetchData}
             changeUpdateValue={changeUpdateValue}/>
             <table className="table table-striped">
                 <tbody>

@@ -19,7 +19,6 @@ export default function ButtonAppBar(props) {
   }, [props.loggedIn])
 
   const logOut = () =>{
-    // setLoggedInButton(!loggedInButton);
     props.changeLoggedInState(false);
     localStorage.removeItem("access_token");
     localStorage.removeItem("exp");

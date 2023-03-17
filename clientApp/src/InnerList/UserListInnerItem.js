@@ -30,7 +30,7 @@ function UserListInnerItem(props){
         }
 
         await axios.get(`http://localhost:8080/buy-ticket/${props.id}`, config)
-        .then(response =>{
+        .then(() =>{
             console.log("Ticket succesfully bought");
         })
         .catch(()=>{
@@ -46,7 +46,8 @@ function UserListInnerItem(props){
             <td className="setTextMid setColumnInnerTextMid">{string.split(" ").at(1)} </td>
             <td className="setTextMid setColumnInnerTextMid">{props.cost} $</td>
             <td className="setTextMid setColumnInnerTextMid">
-                <button type="button" className="btn btn-outline-dark deleteBtn btn-sm" onClick={()=>{buyTicket()}}>Buy ticket</button>
+            {localStorage.getItem("roles").includes("ROLE_ADMIN") ? null : 
+                <button type="button" className="btn btn-outline-dark deleteBtn btn-sm" onClick={()=>{buyTicket()}}>Buy ticket</button>}
             </td>
         </tr>
     )

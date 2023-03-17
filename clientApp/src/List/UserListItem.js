@@ -24,33 +24,6 @@ function UserListItem(props){
         props.changeUpdate();
     }
 
-    const getUserExpInfo = async () =>{
-        await axios.get(`http://localhost:8080/flightinfo/get/${props.id}`)
-        .then(res => {
-            setListInfo(res.data);
-            setInnerModeInfo(true);
-        })
-    }
-
-    const displayValues = () =>{
-        return(
-            <tr className="setTextMid">
-                <td className="setTextMid setColumnTextMid">{props.departure}</td>
-                <td className="setTextMid setColumnTextMid">{props.destination}</td>
-                <td className="setTextMid setColumnTextMid">{props.cost}</td>
-                <td className="setTextMid setColumnTextMid">{props.flights_available}</td>
-                <td>
-                    {innerMode ? null : displayButtons()}
-                </td>
-            </tr>
-        )
-    }
-
-    const toggleLocalUpdate = () =>{
-        props.changeUpdate();
-    }
-
-
     const displayButtons = () => {
         const params = { 
             pathname: `/get-available-tickets/${props.id}`,
@@ -60,7 +33,7 @@ function UserListItem(props){
 
         };
         return(
-            <>
+            <td className="marg">
                 {props.flights_available > 0 ? <Link to={params} state={{ from: props.id }}><button type="button"
                  className="btn btn-outline-dark btn-sm">More</button></Link> : null}
                 {props.loggedIn ? localStorage.getItem("roles").includes("ROLE_ADMIN") ? <Link to={upd} state={{ from: props.id }}>
@@ -69,7 +42,7 @@ function UserListItem(props){
                     <button type="button" className="btn btn-outline-dark deleteBtn btn-sm">Change</button></Link> : null : null}
                 {props.loggedIn ? localStorage.getItem("roles").includes("ROLE_ADMIN") ? <button type="button" 
                 className="btn btn-outline-dark deleteBtn btn-sm" onClick={() => {handleDeleteButtonClick()}}>Delete</button> : null : null}
-            </>
+            </td>
         )
     }
 
@@ -78,9 +51,7 @@ function UserListItem(props){
         <td className="setTextMid setColumnTextMid">{props.departure}</td>
         <td className="setTextMid setColumnTextMid">{props.destination}</td>
         <td className="setTextMid setColumnTextMid">{props.flights_available}</td>
-        <td>
-            {innerMode ? null : displayButtons()}
-        </td>
+        {innerMode ? null : displayButtons()}
         </tr>
     )
 }
