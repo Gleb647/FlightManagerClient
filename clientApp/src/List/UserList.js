@@ -12,6 +12,7 @@ const UserList = (props) =>{
     const [data, setData] = useState([]);
     const [userFindParam, setUserFindParam] = useState("");
     const [userFindName, setUserFindName] = useState("");
+    const [updateValue, setUpdateValue] = useState(false)
     const navigate = useNavigate();
 
 
@@ -19,9 +20,29 @@ const UserList = (props) =>{
         setUpdate(!update);
     }
 
+    const changeUpdateValue = () =>{
+        setUpdateValue(!updateValue);
+    }
+
     React.useEffect(() => {
         setUpdate(props.update);
     }, [props.update])
+
+    useEffect(()=>{
+        
+    }, [changeUpdateValue]) 
+
+    const updateFlightInfoById = (node) =>{
+        data.forEach(function(i){
+            node.forEach(function(j) {
+                if (Object.values(i)[0] == Object.values(j)[0]){
+                    Object.assign(i, j);
+                }
+              });
+        })
+        setData(data);
+        changeUpdateValue();
+    }
 
     useEffect(() => {
         const chechkExp = async() =>{
@@ -80,7 +101,8 @@ const UserList = (props) =>{
 
   return(
     <div>
-        <UserFindInput changeUserFindName={changeUserFindName} changeUserFindParam={changeUserFindParam}/>
+        <UserFindInput changeUserFindName={changeUserFindName} changeUserFindParam={changeUserFindParam} updateFlightInfoById={updateFlightInfoById}
+            changeUpdateValue={changeUpdateValue}/>
             <table className="table table-striped">
                 <tbody>
                     <tr className="setTextMid">

@@ -35,7 +35,11 @@ function UserFindInput(props){
                         params: reqParam
                     })
                 .then(response => {
-                    setUser(response.data);});
+                    setUser(response.data);
+                    //user.map(item => props.updateFlightInfoById(item));
+                    props.updateFlightInfoById(response.data);
+                    //props.changeUpdateValue();
+                });
                 };
                 fetchData();
         }, [name]);

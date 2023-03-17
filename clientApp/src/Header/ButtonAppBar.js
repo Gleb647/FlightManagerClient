@@ -24,6 +24,8 @@ export default function ButtonAppBar(props) {
     localStorage.removeItem("access_token");
     localStorage.removeItem("exp");
     localStorage.removeItem("refresh_token");
+    localStorage.setItem("roles", '');
+    localStorage.setItem("user", '');
   }
 
   const logInBtns = () =>{

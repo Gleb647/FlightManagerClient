@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import jwt_decode from 'jwt-decode';
+import { useLocation } from "react-router-dom";
 
 
 
@@ -12,7 +13,9 @@ export default function LoginForm(props){
     const [login, setLogin] = useState('');
     const [password, setPassword] = useState('');
     const [wrongCredentials, setWrongCredentials] = useState(false);
+    const [hide, setHide] = useState(false);
     const navigate = useNavigate();
+    const location = useLocation();
 
     const addWrongCredentials = () =>{
         setWrongCredentials(true);
@@ -20,6 +23,7 @@ export default function LoginForm(props){
 
     const removeWrongCredentials = () =>{
         setWrongCredentials(false);
+        setHide(true);
     }
 
     const PostUserInfo = async () =>{
@@ -49,10 +53,10 @@ export default function LoginForm(props){
         setPassword('');
     }
 
-    const returnInfoAboutAuth = () =>{
+    const returnInfoAboutAuth = (str) =>{
         return(
             <div className="wrong_cred">
-                <p><span class="wrong_cred">Wrong credentials</span></p>
+                <p><span class="wrong_cred">{str}</span></p>
             </div>
         )
     }
@@ -84,7 +88,8 @@ export default function LoginForm(props){
                         </tr>
                         <tr>
                             <td className = "credentials">
-                            {wrongCredentials == true ? returnInfoAboutAuth() : null}       
+                                {wrongCredentials == true ? returnInfoAboutAuth("Wrong credentials") : null}  
+                                {hide  == false ? location.pathname.includes("bad-auth") ? returnInfoAboutAuth("Sign in before buying") : null : null}
                             </td>
                         </tr>
                         <tr>

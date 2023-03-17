@@ -46,11 +46,10 @@ export default class App extends Component{
     return (
       <div className="App">
           <ButtonAppBar loggedIn={this.state.loggedIn} changeLoggedInState={this.changeLoggedInState}></ButtonAppBar>
-          {/* <div style={style1}> */}
           <Routes>
             <Route path="/" element={<UserList update={this.state.update}/>}/>
             <Route path="/signup" element={<RegisterForm/>}/>
-            <Route path="/login" loggedIn={this.state.loggedIn} element={<LoginForm changeLoggedInState={this.changeLoggedInState}/>}/>
+            <Route path="/login/*" loggedIn={this.state.loggedIn} element={<LoginForm changeLoggedInState={this.changeLoggedInState} />}/>
             <Route path="/add-flight" element={<ControlPanel update={this.state.update} setTrueUpdateState={this.setTrueUpdateState}/>} />
             <Route path="/change-employees-data" element={<ControlPanel setTrueUpdateState={this.setTrueUpdateState}/>} />
             <Route path="/getflights" element={<UserList changeLoggedInState={this.changeLoggedInState} setTrueUpdateState={this.setTrueUpdateState} 

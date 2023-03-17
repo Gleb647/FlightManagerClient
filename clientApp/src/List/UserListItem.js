@@ -61,7 +61,7 @@ function UserListItem(props){
         };
         return(
             <>
-                {props.loggedIn ? <Link to={params} state={{ from: props.id }}><button type="button"
+                {props.flights_available > 0 ? <Link to={params} state={{ from: props.id }}><button type="button"
                  className="btn btn-outline-dark btn-sm">More</button></Link> : null}
                 {props.loggedIn ? localStorage.getItem("roles").includes("ROLE_ADMIN") ? <Link to={upd} state={{ from: props.id }}>
                     <button type="button" className="btn btn-outline-dark deleteBtn btn-sm">Add</button></Link> : null : null}

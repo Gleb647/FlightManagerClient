@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import '../App.css'
 import { useState } from 'react';
 import { useEffect } from 'react';
@@ -8,6 +8,7 @@ import { isExpired, getToken } from '../Utils.js/CheckToken'
 function UserListInnerItem(props){
 
     const [string, setString] = useState(props.date == null ? "---" : props.date);
+    const navigate = useNavigate();
 
     const parseDate = () =>{
         const date = string.split(" ").at(0); 
@@ -31,6 +32,9 @@ function UserListInnerItem(props){
         await axios.get(`http://localhost:8080/buy-ticket/${props.id}`, config)
         .then(response =>{
             console.log("Ticket succesfully bought");
+        })
+        .catch(()=>{
+            navigate("/login")
         })
     }
 
