@@ -38,6 +38,20 @@ function UserListInnerItem(props){
         })
     }
 
+    const handleDeleteButtonClick = async () =>{
+        if (isExpired()){
+            await getToken();
+        }
+        await axios.delete(`http://localhost:8080/flightinfo/delete/${props.id}`,{
+            headers:{
+                'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+            }
+        }).then(()=>{
+            //props.sendGetReq();
+            navigate("/getflights");
+        });
+    }
+
     return(
         <tr className="setTextMid">                  
             <td className="setTextMid setColumnInnerTextMid">{props.carrier}</td>
@@ -48,6 +62,10 @@ function UserListInnerItem(props){
             <td className="setTextMid setColumnInnerTextMid">
             {localStorage.getItem("roles").includes("ROLE_ADMIN") ? null : 
                 <button type="button" className="btn btn-outline-dark deleteBtn btn-sm" onClick={()=>{buyTicket()}}>Buy ticket</button>}
+            {localStorage.getItem("roles").includes("ROLE_ADMIN") ? <Link to="/addexpinfo/change" state={{ from: props.id, meth:"put"}}>
+                <button type="button" className="btn btn-outline-dark deleteBtn btn-sm">Change</button></Link> : null}
+            {localStorage.getItem("roles").includes("ROLE_ADMIN") ? <button type="button" 
+                className="btn btn-outline-dark deleteBtn btn-sm" onClick={() => {handleDeleteButtonClick()}}>Delete</button> : null}
             </td>
         </tr>
     )

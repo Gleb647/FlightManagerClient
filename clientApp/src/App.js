@@ -29,12 +29,6 @@ export default class App extends Component{
     })
   }
 
-  setFalseUpdateState = () =>{
-    this.setState({
-      update: false
-    })
-  }
-
   changeLoggedInState = (logstate) =>{
     this.setState({
       loggedIn: logstate
@@ -55,7 +49,7 @@ export default class App extends Component{
             <Route path="/getflights" element={<UserList changeLoggedInState={this.changeLoggedInState} setTrueUpdateState={this.setTrueUpdateState} 
                 loggedIn={this.state.loggedIn} update={this.state.update} roles={this.state.roles}/>}/>
             <Route path="/get-available-tickets/:id" element={<UserInnerList setTrueUpdateState={this.setTrueUpdateState}/>}/>
-            <Route path="/addexpinfo" element={<AddUserInfo setTrueUpdateState={this.setTrueUpdateState}/>}/>
+            <Route path="/addexpinfo/*" element={<AddUserInfo setTrueUpdateState={this.setTrueUpdateState}/>}/>
           </Routes>
       </div>
     )

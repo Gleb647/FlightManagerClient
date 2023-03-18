@@ -8,9 +8,8 @@ import UserInnerList from '../InnerList/UserInnerList';
 
 function UserListItem(props){
 
-    const [innerMode, setInnerModeInfo] = useState(false)
-    const [displayInnerList, setDisplayInnerList] = useState(false);
-    const [list, setListInfo] = useState([])
+    const [innerMode, setInnerModeInfo] = useState(false);
+    const [add, setAdd] = useState("add");
 
     const handleDeleteButtonClick = async () =>{
         if (isExpired()){
@@ -29,19 +28,19 @@ function UserListItem(props){
             pathname: `/get-available-tickets/${props.id}`,
         };
         const upd = { 
-            pathname: "/addexpinfo",
+            pathname: `/addexpinfo/${add}`,
 
         };
         return(
             <td className="marg">
                 {props.flights_available > 0 ? <Link to={params} state={{ from: props.id }}><button type="button"
                  className="btn btn-outline-dark btn-sm">More</button></Link> : null}
-                {props.loggedIn ? localStorage.getItem("roles").includes("ROLE_ADMIN") ? <Link to={upd} state={{ from: props.id }}>
-                    <button type="button" className="btn btn-outline-dark deleteBtn btn-sm">Add</button></Link> : null : null}
-                {props.loggedIn ? localStorage.getItem("roles").includes("ROLE_ADMIN") ? <Link to="/change-employees-data" state={{ from: props.id }}>
-                    <button type="button" className="btn btn-outline-dark deleteBtn btn-sm">Change</button></Link> : null : null}
-                {props.loggedIn ? localStorage.getItem("roles").includes("ROLE_ADMIN") ? <button type="button" 
-                className="btn btn-outline-dark deleteBtn btn-sm" onClick={() => {handleDeleteButtonClick()}}>Delete</button> : null : null}
+                {localStorage.getItem("roles").includes("ROLE_ADMIN") ? <Link to={upd} state={{ from: props.id }}>
+                    <button type="button" className="btn btn-outline-dark deleteBtn btn-sm">Add</button></Link> : null}
+                {localStorage.getItem("roles").includes("ROLE_ADMIN") ? <Link to="/change-employees-data" state={{ from: props.id, meth:"add" }}>
+                    <button type="button" className="btn btn-outline-dark deleteBtn btn-sm">Change</button></Link> : null}
+                {localStorage.getItem("roles").includes("ROLE_ADMIN") ? <button type="button" 
+                className="btn btn-outline-dark deleteBtn btn-sm" onClick={() => {handleDeleteButtonClick()}}>Delete</button> : null}
             </td>
         )
     }

@@ -13,9 +13,7 @@ export default function LoginForm(props){
     const [login, setLogin] = useState('');
     const [password, setPassword] = useState('');
     const [wrongCredentials, setWrongCredentials] = useState(false);
-    const [hide, setHide] = useState(false);
     const navigate = useNavigate();
-    const location = useLocation();
 
     const addWrongCredentials = () =>{
         setWrongCredentials(true);
@@ -23,7 +21,6 @@ export default function LoginForm(props){
 
     const removeWrongCredentials = () =>{
         setWrongCredentials(false);
-        setHide(true);
     }
 
     const PostUserInfo = async () =>{
@@ -66,39 +63,38 @@ export default function LoginForm(props){
         <div className="ControlPanel">             
                 <div className='addForm centered'>
                     <div id = "addFormCard" className='addFormInput' style = {{display: "block"}}>
-                    <table>
-                        <tbody>
-                        <tr>
-                            <div className="form-group row">
-                            <label for="inputExp3" className="col-sm-3.5 col-form-label">Login:</label>
-                                <div className="col-sm-8">
-                                    <input type="name" value={login} className="form-control" id="inputExp3" name={login} 
-                                    onChange={(event) => {setLogin(event.target.value);removeWrongCredentials()}}/>
+                        <table>
+                            <tbody>
+                            <tr>
+                                <div className="form-group row">
+                                <label for="inputExp3" className="col-sm-3.5 col-form-label">Login:</label>
+                                    <div className="col-sm-8">
+                                        <input type="name" value={login} className="form-control" id="inputExp3" name={login} 
+                                        onChange={(event) => {setLogin(event.target.value);removeWrongCredentials()}}/>
+                                    </div>
                                 </div>
-                            </div>
-                        </tr>
-                        <tr>
-                            <div className="form-group row">
-                            <label for="inputExp3" className="col-sm-3.5 col-form-label">Password:</label>
-                                <div className="col-sm-8">
-                                    <input type="password" value={password} className="form-control" id="inputExp3" name={password} 
-                                    onChange={(event) => {setPassword(event.target.value);removeWrongCredentials()}}/>
+                            </tr>
+                            <tr>
+                                <div className="form-group row">
+                                <label for="inputExp3" className="col-sm-3.5 col-form-label">Password:</label>
+                                    <div className="col-sm-8">
+                                        <input type="password" value={password} className="form-control" id="inputExp3" name={password} 
+                                        onChange={(event) => {setPassword(event.target.value);removeWrongCredentials()}}/>
+                                    </div>
                                 </div>
-                            </div>
-                        </tr>
-                        <tr>
-                            <td className = "credentials">
-                                {wrongCredentials == true ? returnInfoAboutAuth("Wrong credentials") : null}  
-                                {hide  == false ? location.pathname.includes("bad-auth") ? returnInfoAboutAuth("Sign in before buying") : null : null}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                            <input className="btn btn-info cent" type="button" value="Post" onClick={() => PostUserInfo()}/>          
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
+                            </tr>
+                            <tr>
+                                <td className = "credentials">
+                                    {wrongCredentials == true ? returnInfoAboutAuth("Wrong credentials") : null}  
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                <input className="btn btn-info cent" type="button" value="Post" onClick={() => PostUserInfo()}/>          
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>  

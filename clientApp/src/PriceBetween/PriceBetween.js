@@ -17,21 +17,26 @@ function PriceBetween(props){
                     min: minPrice,
                     max: maxPrice
                 })
-                fetchData();
             }else if (minPrice.length >= 1){
                 setParam({
                     min: minPrice,
                 })
-                fetchData();
             }else if (maxPrice.length >= 1){
                 setParam({
                     max: maxPrice,
                 })
-                fetchData();
             }else {
                 props.sendGetReq();
             }
         }, [minPrice, maxPrice])
+
+        useEffect(() =>{
+            console.log("Param length: ");
+            console.log(param.length);
+            if (Object.keys(param).length> 0){
+                fetchData();
+            }
+        }, [param])
     
         const fetchData = async () => {
             await axios

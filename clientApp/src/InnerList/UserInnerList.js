@@ -22,6 +22,7 @@ const UserInnerList = (props) =>{
 
     const getUserExpInfo = async () =>{
         const prodId = params.id;
+        console.log("Sendeing flingo get");
         await axios.get(`http://localhost:8080/flightinfo/get/${prodId}`)
             .then(res => {
                 setListInfo(res.data);
@@ -30,11 +31,15 @@ const UserInnerList = (props) =>{
     }
 
     useEffect(() =>{
+        console.log("UPDATING get");
         getUserExpInfo();
     }, [get])
 
     useEffect(()=>{
-        displayListItem();
+        if (list.length > 0){
+            console.log(list);
+            displayListItem();
+        }
     }, [list])
 
     const changeList = (lst) =>{
@@ -47,7 +52,7 @@ const UserInnerList = (props) =>{
             {list.map((items) =>{
                 return(
                     <UserListInnerItem className='UsersTable' key={items.id}  id={items.id} carrier={items.carrier} 
-                        flightDuration={items.flightDuration} cost={items.cost} date={items.date}/>
+                        flightDuration={items.flightDuration} cost={items.cost} date={items.date} sendGetReq={sendGetReq}/>
                 )
             })}
             </>
