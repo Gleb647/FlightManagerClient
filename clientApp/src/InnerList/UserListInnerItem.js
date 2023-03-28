@@ -18,8 +18,6 @@ function UserListInnerItem(props){
 
     const buyTicket = async () =>{
         const userName = localStorage.getItem("user");
-        console.log("User" + userName);
-
         let config = {
             headers: {'Content-type': 'application/json',
                     'Authorization': 'Bearer ' + localStorage.getItem('access_token')
@@ -47,7 +45,6 @@ function UserListInnerItem(props){
                 'Authorization': 'Bearer ' + localStorage.getItem('access_token')
             }
         }).then(()=>{
-            //props.sendGetReq();
             navigate("/getflights");
         });
     }

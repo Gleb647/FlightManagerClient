@@ -47,8 +47,12 @@ function UserListItem(props){
 
     return(
         <tr className="setTextMid">
+            <td className="setTextMid setColumnTextMid">
+            <img src={props.file}/>
+            </td>
         <td className="setTextMid setColumnTextMid">{props.departure}</td>
         <td className="setTextMid setColumnTextMid">{props.destination}</td>
+        <td className="setTextMid setColumnTextMid">{props.flights_available}</td>
         <td className="setTextMid setColumnTextMid">{props.flights_available}</td>
         {innerMode ? null : displayButtons()}
         </tr>

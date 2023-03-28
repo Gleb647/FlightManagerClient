@@ -35,6 +35,9 @@ const UserList = (props) =>{
         await axios(
             'http://localhost:8080/flights/get',
         ).then(response => {
+        //     const obj = [];
+        //     obj = response.data;
+        //     console.log(obj[0].flight);
             setData(response.data);
         });
     };
@@ -59,8 +62,9 @@ const UserList = (props) =>{
             <>
                 {data.map(items=>{
                     return (             
-                        <UserListItem loggedIn={props.loggedIn} roles={props.roles} className='UsersTable' changeUpdate={changeUpdate} key={items.id} 
-                        id={items.id} departure={items.departure} destination={items.destination} flights_available={items.flightsAvailable}/>
+                        <UserListItem loggedIn={props.loggedIn} roles={props.roles} className='UsersTable' changeUpdate={changeUpdate} key={items.flight.id} 
+                        id={items.flight.id} departure={items.flight.departure} destination={items.flight.destination} 
+                        flights_available={items.flight.flightsAvailable} file={"data:image/png;base64,"+items.file}/>
                     );
                 })}
             </>

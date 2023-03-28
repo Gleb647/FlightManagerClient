@@ -22,7 +22,6 @@ const UserInnerList = (props) =>{
 
     const getUserExpInfo = async () =>{
         const prodId = params.id;
-        console.log("Sendeing flingo get");
         await axios.get(`http://localhost:8080/flightinfo/get/${prodId}`)
             .then(res => {
                 setListInfo(res.data);
@@ -37,7 +36,6 @@ const UserInnerList = (props) =>{
 
     useEffect(()=>{
         if (list.length > 0){
-            console.log(list);
             displayListItem();
         }
     }, [list])

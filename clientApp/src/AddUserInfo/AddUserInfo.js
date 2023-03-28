@@ -23,28 +23,39 @@ const AddUserInfo = (props) =>{
     }
 
     const postUserInfo = async () =>{
+        const headers = {
+            'Content-type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+        }
         const Info = {
             carrier: carrier,
             flightDuration: duration,
             cost: cost,
             date: date
         }
-        await axios.post(`http://localhost:8080/flightinfo/${location.state.from}`, Info)
+        await axios.post(`http://localhost:8080/flightinfo/${location.state.from}`, Info, {
+            headers: headers
+        })
         .then(() =>{
-            //props.setTrueUpdateState();
             navigate("/getflights");
         });
         
     }
 
     const putUserRequest = async () =>{
+        const headers = {
+            'Content-type': 'application/json',
+            'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+        }
         const Info = {
             carrier: carrier,
             flightDuration: duration,
             cost: cost,
             date: date
         }
-        await axios.put(`http://localhost:8080/flightinfo/change/${location.state.from}`, Info)
+        await axios.put(`http://localhost:8080/flightinfo/change/${location.state.from}`, Info, {
+            headers: headers
+        })
         .then(() =>{
             navigate("/getflights");
         }).catch(() =>{

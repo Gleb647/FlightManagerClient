@@ -18,6 +18,7 @@ const ControlPanel = (props) => {
     const [node, setNode] = useState(false);
     const [blank, setBlank] = useState(false);
     const [validationError, setValidationError] = useState(false);
+    const [fileInput, setFileInput] = useState(null);
     const location = useLocation();
     const navigate = useNavigate();
 
@@ -42,14 +43,19 @@ const ControlPanel = (props) => {
         }
 
         const headers = {
-            'Content-type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+            //'Content-type': 'application/json',
+            "content-type": "multipart/form-data",
+            // "content-length": `${fileInput.size}`,
+            "Authorization": "Bearer " + localStorage.getItem('access_token'),
+             
         }
 
-        await axios.post('http://localhost:8080/flights/add', {
-            departure: fromInput,
-            destination: toInput,
-        }, {
+        let formData = new FormData();
+        formData.append("file", fileInput);
+        formData.append("departure", fromInput);
+        formData.append("destination", toInput);
+
+        await axios.post('http://localhost:8080/flights/add', formData, {
             headers: headers
         })
           .then(function (response) {
@@ -61,9 +67,11 @@ const ControlPanel = (props) => {
             nodeIsAlreadyExist();
           }
           );
-          console.log("Bearer " + localStorage.getItem('access_token'));
+          //console.log("Bearer " + localStorage.getItem('access_token'));
+          console.log(formData);
         setFromInput('');
         setToInput('');
+        //setFileInput('');
         props.setTrueUpdateState();
     }
 
@@ -110,6 +118,11 @@ const ControlPanel = (props) => {
         setFromInput("");
     }
 
+    function handleFileChange(event) {
+        console.log(event.target.files[0]);
+        setFileInput(event.target.files[0]);
+        //resetAllMessages();
+    }
 
     return(
             <div className="ControlPanel">             
@@ -126,13 +139,21 @@ const ControlPanel = (props) => {
                                     </div>
                                 </div>
                             </tr>
-
                             <tr>
                                 <div className="form-group row">
                                 <label for="inputCompany3" className="col-sm-3.5 col-form-label">To:</label>
                                     <div className="col-sm-8">
                                         <input type="name" value={toInput} className="form-control" name={toInput} 
                                         onChange={(event) => {setToInput(event.target.value); resetAllMessages()}}/>
+                                    </div>
+                                </div>
+                            </tr>
+                            <tr>
+                                <div className="form-group row">
+                                <label for="inputCompany3" className="col-sm-3.5 col-form-label">Destination picture:</label>
+                                    <div className="col-sm-8">
+                                        <input type="file"  className="form-control" name={fileInput} 
+                                        onChange={handleFileChange}/>
                                     </div>
                                 </div>
                             </tr>
