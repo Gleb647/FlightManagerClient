@@ -30,7 +30,6 @@ const UserInnerList = (props) =>{
     }
 
     useEffect(() =>{
-        console.log("UPDATING get");
         getUserExpInfo();
     }, [get])
 
@@ -58,21 +57,11 @@ const UserInnerList = (props) =>{
     }   
 
   return(
-    <div>
+    <div className="tableDiv">
         <PriceBetween changeList={changeList} prodId={params.id} sendGetReq={sendGetReq}/>
-        <table className="table table-striped">
-            <tbody>
-                <tr className="setTextMid">
-                    <th scope="col">Carrier</th>
-                    <th scope="col">Flight duration</th>
-                    <th scope="col">Date</th>
-                    <th scope="col">Time</th>
-                    <th scope="col">Cost</th>
-                    <th scope="col"></th>
-                </tr>
-                {displayListItem()}
-            </tbody>
-        </table>
+        <div>
+            {displayListItem()}
+        </div>
     </div>
   )
 }

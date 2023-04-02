@@ -39,7 +39,7 @@ export default function ButtonAppBar(props) {
   return (
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static" color="default">
-        <Toolbar>
+        <Toolbar className="head">
           <Typography variant="h6" component="div" sx={{ width: '140px' }}>
             FlightTickets
           </Typography>

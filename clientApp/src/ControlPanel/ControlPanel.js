@@ -43,11 +43,8 @@ const ControlPanel = (props) => {
         }
 
         const headers = {
-            //'Content-type': 'application/json',
             "content-type": "multipart/form-data",
-            // "content-length": `${fileInput.size}`,
             "Authorization": "Bearer " + localStorage.getItem('access_token'),
-             
         }
 
         let formData = new FormData();
@@ -59,19 +56,14 @@ const ControlPanel = (props) => {
             headers: headers
         })
           .then(function (response) {
-            console.log(response);
             navigate("/getflights");
           })
           .catch(function (error) {
-            console.log("Such node is already exist");
             nodeIsAlreadyExist();
           }
           );
-          //console.log("Bearer " + localStorage.getItem('access_token'));
-          console.log(formData);
         setFromInput('');
         setToInput('');
-        //setFileInput('');
         props.setTrueUpdateState();
     }
 
@@ -80,14 +72,15 @@ const ControlPanel = (props) => {
             navigate("/login");
         }
         const headers = {
-            'Content-type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+            "content-type": "multipart/form-data",
+            "Authorization": "Bearer " + localStorage.getItem('access_token'),
         }
-        const Way = {
-            departure: fromInput,
-            destination: toInput,
-        }
-        await axios.put(`http://localhost:8080/flights/change/${location.state.from}`,Way,{
+
+        let formData = new FormData();
+        formData.append("file", fileInput);
+        formData.append("departure", fromInput);
+        formData.append("destination", toInput);
+        await axios.put(`http://localhost:8080/flights/change/${location.state.from}`,formData,{
             headers: headers
         }).then(() =>{
             navigate("/getflights");
@@ -119,9 +112,7 @@ const ControlPanel = (props) => {
     }
 
     function handleFileChange(event) {
-        console.log(event.target.files[0]);
         setFileInput(event.target.files[0]);
-        //resetAllMessages();
     }
 
     return(
@@ -152,7 +143,7 @@ const ControlPanel = (props) => {
                                 <div className="form-group row">
                                 <label for="inputCompany3" className="col-sm-3.5 col-form-label">Destination picture:</label>
                                     <div className="col-sm-8">
-                                        <input type="file"  className="form-control" name={fileInput} 
+                                        <input type="file" className="form-control" name={fileInput} 
                                         onChange={handleFileChange}/>
                                     </div>
                                 </div>

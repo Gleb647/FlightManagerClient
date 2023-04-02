@@ -22,6 +22,10 @@ const UserList = (props) =>{
         setUpdateValue(!updateValue);
     }
 
+    const setNewData = (lst) =>{
+        setData(lst);
+    }
+
     useEffect(() => {
         setUpdate(props.update);
     }, [props.update])
@@ -35,9 +39,6 @@ const UserList = (props) =>{
         await axios(
             'http://localhost:8080/flights/get',
         ).then(response => {
-        //     const obj = [];
-        //     obj = response.data;
-        //     console.log(obj[0].flight);
             setData(response.data);
         });
     };
@@ -64,7 +65,7 @@ const UserList = (props) =>{
                     return (             
                         <UserListItem loggedIn={props.loggedIn} roles={props.roles} className='UsersTable' changeUpdate={changeUpdate} key={items.flight.id} 
                         id={items.flight.id} departure={items.flight.departure} destination={items.flight.destination} 
-                        flights_available={items.flight.flightsAvailable} file={"data:image/png;base64,"+items.file}/>
+                        flights_available={items.flight.flightsAvailable} file={"data:image/png;base64,"+items.file} setNewData={setNewData}/>
                     );
                 })}
             </>
@@ -75,18 +76,9 @@ const UserList = (props) =>{
     <div className="tableDiv">
         <UserFindInput updateFlightInfoById={updateFlightInfoById} fetchData={fetchData}
             changeUpdateValue={changeUpdateValue}/>
-            <table className="table table-striped">
-                <tbody>
-                    <tr className="setTextMid">
-                        <th scope="custom_width">Departure</th>
-                        <th scope="custom_width">Destination</th>
-                        <th scope="custom_width">Flights available</th>
-                        <th scope="custom_width"></th>
-                    </tr>
-                    {displayListItem()}
-                </tbody>
-            </table>
-        </div>
+        {displayListItem()}
+
+    </div>
   )
 }
 

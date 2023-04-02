@@ -40,7 +40,7 @@ function UserFindInput(props){
 
     return(
         <div>
-            <div className="input-group">
+            <div className="input-group" style={{marginBottom:"10px"}}>
                 <input className="form-control userFind form-control-sm-4" placeholder={selectValue} onChange={(event) => {
                     setName(event.target.value);
                     setNameModified(true)}}/>
