@@ -1,7 +1,12 @@
 FROM node:alpine
-WORKDIR usr/app/front
+WORKDIR /app
+COPY package.json /app
+COPY package-lock.json /app
+
+COPY . /app
 EXPOSE 3000
-COPY . .
+
 RUN npm install
 RUN npm install react-bootstrap bootstrap
+RUN npm install react-scripts@5.0.1 
 CMD ["npm", "start"]

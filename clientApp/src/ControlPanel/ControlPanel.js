@@ -36,60 +36,66 @@ const ControlPanel = (props) => {
         setBlank(true);
     }
 
-    const AddUserRequest = async () => {
+    const AddUserRequest = () => {
         setInputFormDisplay('block');
-        if (getToken() == true){
+        const fetchPostRequest = async () =>{
+            const headers = {
+                "content-type": "multipart/form-data",
+                "Authorization": "Bearer " + localStorage.getItem('access_token'),
+            }
+    
+            let formData = new FormData();
+            formData.append("file", fileInput);
+            formData.append("departure", fromInput);
+            formData.append("destination", toInput);
+    
+            await axios.post('http://localhost:8080/flights/add', formData, {
+                headers: headers
+            })
+              .then(function (response) {
+                navigate("/getflights");
+              })
+              .catch(function (error) {
+                nodeIsAlreadyExist();
+              }
+              );
+            setFromInput('');
+            setToInput('');
+            props.setTrueUpdateState();
+        }
+        if (getToken(fetchPostRequest) == true){
             navigate("/login");
         }
-
-        const headers = {
-            "content-type": "multipart/form-data",
-            "Authorization": "Bearer " + localStorage.getItem('access_token'),
-        }
-
-        let formData = new FormData();
-        formData.append("file", fileInput);
-        formData.append("departure", fromInput);
-        formData.append("destination", toInput);
-
-        await axios.post('http://localhost:8080/flights/add', formData, {
-            headers: headers
-        })
-          .then(function (response) {
-            navigate("/getflights");
-          })
-          .catch(function (error) {
-            nodeIsAlreadyExist();
-          }
-          );
-        setFromInput('');
-        setToInput('');
-        props.setTrueUpdateState();
     }
 
-    const putUserRequest = async () =>{
-        if (getToken() == true){
+    const putUserRequest = () =>{
+        const fetchPutRequest = async () =>{
+            if (getToken() == true){
+                navigate("/login");
+            }
+            const headers = {
+                "content-type": "multipart/form-data",
+                "Authorization": "Bearer " + localStorage.getItem('access_token'),
+            }
+    
+            let formData = new FormData();
+            formData.append("file", fileInput);
+            formData.append("departure", fromInput);
+            formData.append("destination", toInput);
+            await axios.put(`http://localhost:8080/flights/change/${location.state.from}`,formData,{
+                headers: headers
+            }).then(() =>{
+                navigate("/getflights");
+            }).catch(() =>{
+                console.log("Such node is already exist");
+                nodeIsAlreadyExist();
+            });
+            setFromInput('');
+            setToInput('');
+        }
+        if (getToken(fetchPutRequest) == true){
             navigate("/login");
         }
-        const headers = {
-            "content-type": "multipart/form-data",
-            "Authorization": "Bearer " + localStorage.getItem('access_token'),
-        }
-
-        let formData = new FormData();
-        formData.append("file", fileInput);
-        formData.append("departure", fromInput);
-        formData.append("destination", toInput);
-        await axios.put(`http://localhost:8080/flights/change/${location.state.from}`,formData,{
-            headers: headers
-        }).then(() =>{
-            navigate("/getflights");
-        }).catch(() =>{
-            console.log("Such node is already exist");
-            nodeIsAlreadyExist();
-        });
-        setFromInput('');
-        setToInput('');
     }
 
     const returnInfoAboutAuth = (str) =>{

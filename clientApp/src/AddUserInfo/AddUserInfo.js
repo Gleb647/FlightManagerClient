@@ -3,6 +3,7 @@ import { Link } from "react-router-dom"
 import { useState } from "react"
 import axios from "axios";
 import { useLocation, useNavigate } from "react-router-dom";
+import { getToken } from "../Utils.js/CheckToken";
 
 const AddUserInfo = (props) =>{
 
@@ -22,46 +23,56 @@ const AddUserInfo = (props) =>{
         setNode(false);
     }
 
-    const postUserInfo = async () =>{
-        const headers = {
-            'Content-type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+    const postUserInfo = () =>{
+        const fetchPostFlightInfo = async () =>{
+            const headers = {
+                'Content-type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+            }
+            const Info = {
+                carrier: carrier,
+                flightDuration: duration,
+                cost: cost,
+                date: date
+            }
+            await axios.post(`http://localhost:8080/flightinfo/${location.state.from}`, Info, {
+                headers: headers
+            })
+            .then(() =>{
+                navigate("/getflights");
+            });
         }
-        const Info = {
-            carrier: carrier,
-            flightDuration: duration,
-            cost: cost,
-            date: date
+        if (getToken(fetchPostFlightInfo) == true){
+            navigate("/login");
         }
-        await axios.post(`http://localhost:8080/flightinfo/${location.state.from}`, Info, {
-            headers: headers
-        })
-        .then(() =>{
-            navigate("/getflights");
-        });
-        
     }
 
-    const putUserRequest = async () =>{
-        const headers = {
-            'Content-type': 'application/json',
-            'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+    const putUserRequest = () =>{
+        const fetchPutFlightInfo = async () =>{
+            const headers = {
+                'Content-type': 'application/json',
+                'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+            }
+            const Info = {
+                carrier: carrier,
+                flightDuration: duration,
+                cost: cost,
+                date: date
+            }
+            await axios.put(`http://localhost:8080/flightinfo/change/${location.state.from}`, Info, {
+                headers: headers
+            })
+            .then(() =>{
+                navigate("/getflights");
+            }).catch(() =>{
+                console.log("Such node is already exist");
+                setNode(true);
+            });
         }
-        const Info = {
-            carrier: carrier,
-            flightDuration: duration,
-            cost: cost,
-            date: date
+
+        if (getToken(fetchPutFlightInfo) == true){
+            navigate("/login");
         }
-        await axios.put(`http://localhost:8080/flightinfo/change/${location.state.from}`, Info, {
-            headers: headers
-        })
-        .then(() =>{
-            navigate("/getflights");
-        }).catch(() =>{
-            console.log("Such node is already exist");
-            setNode(true);
-        });
     }
 
     const returnInfoAboutAuth = (str) =>{

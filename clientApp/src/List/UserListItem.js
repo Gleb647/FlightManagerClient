@@ -5,24 +5,28 @@ import { useState } from 'react';
 import { useEffect } from 'react';
 import { isExpired, getToken } from '../Utils.js/CheckToken'
 import UserInnerList from '../InnerList/UserInnerList';
+import { useNavigate } from 'react-router-dom';
 
 function UserListItem(props){
 
     const [innerMode, setInnerModeInfo] = useState(false);
     const [add, setAdd] = useState("add");
+    const navigate = useNavigate();
 
     const handleDeleteButtonClick = async () =>{
-        if (isExpired()){
-            await getToken();
+        const fetchDelete = async () =>{
+            await axios.delete(`http://localhost:8080/flights/delete/${props.id}`,{
+                headers:{
+                    'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+                }
+            })
+            .then((respone)=>{
+                props.setNewData(respone.data);
+            });
         }
-        await axios.delete(`http://localhost:8080/flights/delete/${props.id}`,{
-            headers:{
-                'Authorization': 'Bearer ' + localStorage.getItem('access_token')
-            }
-        })
-        .then((respone)=>{
-            props.setNewData(respone.data);
-        });
+        if (getToken(fetchDelete) == true){
+            navigate("/login");
+        }
     }
 
     const displayButtons = () => {

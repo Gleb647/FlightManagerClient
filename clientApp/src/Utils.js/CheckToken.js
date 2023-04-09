@@ -11,7 +11,7 @@ export const isExpired = () => {
    return Date.now() > exp;
 };
 
-export const getToken = async () =>{
+export const getToken = async (fetchRequest) =>{
     let redirect = false;
     const token = localStorage.getItem("access_token");
     if (!token){
@@ -29,12 +29,16 @@ export const getToken = async () =>{
             localStorage.setItem("exp", response.data.exp);
             let decoded = jwt_decode(response.data.access_token);
             localStorage.setItem("roles", decoded.roles);
+            console.log("Refreshing token");
+            fetchRequest();
+            return redirect;
         })
         .catch((error)=>{
             if (error.response.data.error_message.includes("The Token has expired")){
                 redirect = true;
             }
         })
+    }else{
+        fetchRequest();
     }
-     return redirect;
 }

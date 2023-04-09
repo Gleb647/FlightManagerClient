@@ -5,12 +5,15 @@ import  React,{ Component, useState, useEffect } from 'react';
 import UserFindInput from "../UserFindInput/UserFindInput";
 import { isExpired, getToken } from '../Utils.js/CheckToken'
 import { Navigate, useNavigate } from "react-router-dom";
+import ReactPaginate from 'react-paginate';
 
 const UserList = (props) =>{
 
     const [update, setUpdate] = useState({...props.update});
     const [data, setData] = useState([]);
-    const [updateValue, setUpdateValue] = useState(false)
+    const [updateValue, setUpdateValue] = useState(false);
+    const [pageNum, setPageNum] = useState(0);
+    const [pageSize, setPageSize] = useState(6);
     const navigate = useNavigate();
 
 
@@ -35,9 +38,18 @@ const UserList = (props) =>{
         changeUpdateValue();
     }
 
+    // const updatePageNum = () =>{
+    //     setPageNum(++pageNum);
+    //     fetchData();
+    // }
+
     const fetchData = async () => {
+        const params = {
+            pageNum: pageNum,
+            pageSize: "6"
+        }
         await axios(
-            'http://localhost:8080/flights/get',
+            'http://localhost:8080/flights/get', {params},
         ).then(response => {
             setData(response.data);
         });
@@ -72,12 +84,25 @@ const UserList = (props) =>{
         )
     }
 
+    function handlePageClick ({selected: selectedpage}) {  
+        setPageNum(selectedpage);  
+        fetchData();
+    }  
+
   return(
     <div className="tableDiv">
         <UserFindInput updateFlightInfoById={updateFlightInfoById} fetchData={fetchData}
             changeUpdateValue={changeUpdateValue}/>
         {displayListItem()}
-
+        <ReactPaginate
+        breakLabel="..."
+        nextLabel="next >"
+        onPageChange={handlePageClick}
+        pageRangeDisplayed={6}
+        pageCount={2}
+        previousLabel="< previous"
+        renderOnZeroPageCount={null}
+      />
     </div>
   )
 }

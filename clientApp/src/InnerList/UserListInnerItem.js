@@ -8,54 +8,61 @@ import { useParams } from 'react-router-dom';
 
 function UserListInnerItem(props){
 
-    const [string, setString] = useState(props.date == null ? "---" : props.date);
+    const [str, setStr] = useState(props.date == null ? "---" : props.date);
     const params = useParams();
     const navigate = useNavigate();
 
     const parseDate = () =>{
-        const date = string.split(" ").at(0); 
+        const date = str.split(" ").at(0); 
         const ms = date.split("-");
         return ms.at(2) + "-" + ms.at(1) + "-"+ms.at(0);
     }
 
-    const buyTicket = async () =>{
-        const userName = localStorage.getItem("user");
-        let config = {
-            headers: {'Content-type': 'application/json',
-                    'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+    const buyTicket = () =>{
+        const fetchBuyTicket = async () =>{
+            const userName = localStorage.getItem("user");
+            let config = {
+                headers: {'Content-type': 'application/json',
+                        'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+                    },
+                params: {
+                    username: userName 
                 },
-            params: {
-                username: userName 
-            },
+            }
+    
+            await axios.get(`http://localhost:8080/buy-ticket/${props.id}`, config)
+            .then(() =>{
+                console.log("Ticket succesfully bought");
+            })
+            .catch(()=>{
+                navigate("/login")
+            })
         }
-
-        await axios.get(`http://localhost:8080/buy-ticket/${props.id}`, config)
-        .then(() =>{
-            console.log("Ticket succesfully bought");
-        })
-        .catch(()=>{
-            navigate("/login")
-        })
+        if (getToken(fetchBuyTicket) == true){
+            navigate("/login");
+        }
     }
 
-    const handleDeleteButtonClick = async () =>{
-        if (isExpired()){
-            await getToken();
+    const handleDeleteButtonClick =  () =>{
+        const fetchDelete = async () =>{
+            await axios.delete(`http://localhost:8080/flightinfo/delete/${props.id}`,{
+                headers:{
+                    'Authorization': 'Bearer ' + localStorage.getItem('access_token')
+                }
+            }).then(()=>{
+                navigate("/getflights");
+            });
         }
-        await axios.delete(`http://localhost:8080/flightinfo/delete/${props.id}`,{
-            headers:{
-                'Authorization': 'Bearer ' + localStorage.getItem('access_token')
-            }
-        }).then(()=>{
-            navigate("/getflights");
-        });
+        if (getToken(fetchDelete) == true){
+            navigate("/login");
+        }
     }
 
     return(
         <div className="setTextMid listItem">  
             <div style={{float:"left", display:"inline-block", paddingLeft:"8%", marginTop:"4%"}}>      
             <div style={{fontSize:"24px"}}>{parseDate()}</div>
-            <div style={{fontSize:"14px"}}>{string.split(" ").at(1)}</div>
+            <div style={{fontSize:"14px"}}>{str.split(" ").at(1)}</div>
             </div>
             <div style={{float:"left", display:"inline", paddingLeft:"10%",paddingTop:"10px", height:"100%"}}>
                 <img src={require('../static/fl.png')} />   
