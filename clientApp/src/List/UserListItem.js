@@ -20,14 +20,21 @@ function UserListItem(props){
                     'Authorization': 'Bearer ' + localStorage.getItem('access_token')
                 }
             })
-            .then((respone)=>{
-                props.setNewData(respone.data);
+            .then((response)=>{
+                props.setNewData(response.data);
+                const headers = response.headers;
+                const numOfFlight = Object.entries(headers).at(3)[1];
+                decPageCount(numOfFlight);
             });
         }
         if (getToken(fetchDelete) == true){
             navigate("/login");
         }
     }
+    const decPageCount = (numOfFlight) =>{
+        return numOfFlight % props.pageSize  == 0 ? props.decreasePageCount(Math.floor(numOfFlight/props.pageSize)) : props.decreasePageCount(1);
+    }
+    
 
     const displayButtons = () => {
         const params = { 

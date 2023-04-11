@@ -34,9 +34,7 @@ export const getToken = async (fetchRequest) =>{
             return redirect;
         })
         .catch((error)=>{
-            if (error.response.data.error_message.includes("The Token has expired")){
-                redirect = true;
-            }
+            redirect = true;
         })
     }else{
         fetchRequest();

@@ -6,6 +6,7 @@ import UserFindInput from "../UserFindInput/UserFindInput";
 import { isExpired, getToken } from '../Utils.js/CheckToken'
 import { Navigate, useNavigate } from "react-router-dom";
 import ReactPaginate from 'react-paginate';
+import {Pagination} from '../Pagination/Pagination'
 
 const UserList = (props) =>{
 
@@ -14,6 +15,9 @@ const UserList = (props) =>{
     const [updateValue, setUpdateValue] = useState(false);
     const [pageNum, setPageNum] = useState(0);
     const [pageSize, setPageSize] = useState(6);
+    const [pageCount, setPageCount] = useState(1);
+    const [innerMode, setInnerMode] = useState(false);
+    const [rerender, setRerender] = useState(false);
     const navigate = useNavigate();
 
 
@@ -29,6 +33,19 @@ const UserList = (props) =>{
         setData(lst);
     }
 
+    const decreasePageCount = (dec) =>{
+        setPageCount(dec);
+        setPageNum(0);
+    }
+
+    const changePageNum = (num) =>{
+        setPageNum(num);
+    }
+
+    const changeInnerMode = (stat) =>{
+        return innerMode == true ? (setInnerMode(stat), setPageNum(0)) : setInnerMode(stat);
+    }
+
     useEffect(() => {
         setUpdate(props.update);
     }, [props.update])
@@ -38,24 +55,24 @@ const UserList = (props) =>{
         changeUpdateValue();
     }
 
-    // const updatePageNum = () =>{
-    //     setPageNum(++pageNum);
-    //     fetchData();
-    // }
-
     const fetchData = async () => {
+        console.log("FETCHING BASE");
         const params = {
             pageNum: pageNum,
-            pageSize: "6"
+            pageSize: pageSize
         }
         await axios(
             'http://localhost:8080/flights/get', {params},
         ).then(response => {
+            changeInnerMode(false);
             setData(response.data);
+            const headers = response.headers;
+            const numOfFlight = Object.entries(headers).at(3)[1];
+            numOfFlight > pageSize ? setPageCount(Math.floor(numOfFlight/pageSize)+1) : setPageCount(1);
         });
     };
 
-    useEffect(() => {
+    useEffect(()=>{
         const chechkExp = async() =>{
             if (isExpired()){
                 await getToken().then(response =>{
@@ -66,9 +83,12 @@ const UserList = (props) =>{
                 });
             }                
         }
-        chechkExp();
-        fetchData();
-    }, []);
+        console.log("INNER MODE: " + innerMode);
+        if (innerMode != true){
+            chechkExp();
+            fetchData();
+        }
+    }, [pageNum])
 
     const displayListItem = () =>{
         return(
@@ -76,33 +96,25 @@ const UserList = (props) =>{
                 {data.map(items=>{
                     return (             
                         <UserListItem loggedIn={props.loggedIn} roles={props.roles} className='UsersTable' changeUpdate={changeUpdate} key={items.flight.id} 
-                        id={items.flight.id} departure={items.flight.departure} destination={items.flight.destination} 
-                        flights_available={items.flight.flightsAvailable} file={"data:image/png;base64,"+items.file} setNewData={setNewData}/>
+                        id={items.flight.id} departure={items.flight.departure} destination={items.flight.destination} setPageCount={setPageCount}
+                        flights_available={items.flight.flightsAvailable} file={"data:image/png;base64,"+items.file} setNewData={setNewData}
+                        decreasePageCount={decreasePageCount} pageSize={pageSize}/>
                     );
                 })}
             </>
         )
     }
 
-    function handlePageClick ({selected: selectedpage}) {  
-        setPageNum(selectedpage);  
-        fetchData();
-    }  
-
   return(
     <div className="tableDiv">
         <UserFindInput updateFlightInfoById={updateFlightInfoById} fetchData={fetchData}
-            changeUpdateValue={changeUpdateValue}/>
+            changeUpdateValue={changeUpdateValue} pageNum={pageNum} pageSize={pageSize} pageCount={pageCount}
+            decreasePageCount={decreasePageCount} changeInnerMode={changeInnerMode}/>
         {displayListItem()}
-        <ReactPaginate
-        breakLabel="..."
-        nextLabel="next >"
-        onPageChange={handlePageClick}
-        pageRangeDisplayed={6}
-        pageCount={2}
-        previousLabel="< previous"
-        renderOnZeroPageCount={null}
-      />
+        {pageCount < 2 ? null : <Pagination
+            postsPerPage={pageSize}
+            pageCount={pageCount}
+            paginate={changePageNum}/>}
     </div>
   )
 }

@@ -14,24 +14,35 @@ function UserFindInput(props){
         let reqParam = {};
         if (selectValue == "To.."){
             reqParam = {
-                destination: name
+                destination: name,
+                pageNum: 0,
+                pageSize: props.pageSize
             }
         }else{
             reqParam = {
-                departure: name
+                departure: name,
+                pageNum: 0,
+                pageSize: props.pageSize
             }
         }
         const fetchData = async () => {
+            console.log("FETCHING FIND0");
             if (name.length > 0){
+                console.log("FETCHING FIND1");
                 await axios
                 .get(
                     'http://localhost:8080/flights/get', {
                         params: reqParam
                     })
                 .then(response => {
+                    props.changeInnerMode(true);
                     props.updateFlightInfoById(response.data);
+                    const headers = response.headers;
+                    const numOfFlight = Object.entries(headers).at(3)[1];
+                    numOfFlight > props.pageSize ? props.decreasePageCount(Math.floor(numOfFlight/props.pageSize)) : props.decreasePageCount(1);
                 });
-            }else if (nameModified){
+            }else if (nameModified == true){
+                props.decreasePageCount(1);
                 props.fetchData();
             }
         };
@@ -40,7 +51,7 @@ function UserFindInput(props){
 
     return(
         <div>
-            <div className="input-group" style={{marginBottom:"10px"}}>
+            <div className="input-group" style={{marginBottom:"10px", marginLeft:"10px"}}>
                 <input className="form-control userFind form-control-sm-4" placeholder={selectValue} onChange={(event) => {
                     setName(event.target.value);
                     setNameModified(true)}}/>

@@ -49,13 +49,21 @@ function UserListInnerItem(props){
                 headers:{
                     'Authorization': 'Bearer ' + localStorage.getItem('access_token')
                 }
-            }).then(()=>{
-                navigate("/getflights");
+            }).then((response)=>{
+                // navigate("/getflights");
+                const headers = response.headers;
+                const numOfFlight = Object.entries(headers).at(2)[1];
+                console.log(Object.entries(headers));
+                decPageCount(numOfFlight);
             });
         }
         if (getToken(fetchDelete) == true){
             navigate("/login");
         }
+    }
+
+    const decPageCount = (numOfFlight) =>{
+        return numOfFlight % props.pageSize  == 0 ? props.searchPageCount(Math.floor(numOfFlight/props.pageSize), true) : props.searchPageCount(1, true);
     }
 
     return(
